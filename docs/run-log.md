@@ -12,9 +12,9 @@
 | 모델 | 실행 로그 |
 |---|---|
 | Solar Pro 4 | [run-log-solar-pro-4.md](run-log-solar-pro-4.md) |
-| GPT 6.1 Sol | [run-log-gpt-6.1-sol.md](run-log-gpt-6.1-sol.md) |
+| GPT 4o | [run-log-gpt-4o.md](run-log-gpt-4o.md) |
 | Gemini 3.8 flash | [run-log-gemini-3.8-flash.md](run-log-gemini-3.8-flash.md) |
-| Claude Fable 5.1 | [run-log-claude-fable-5.1.md](run-log-claude-fable-5.1.md) |
+| Claude Haiku 4.5 | [run-log-claude-haiku-4.5.md](run-log-claude-haiku-4.5.md) |
 
 네 모델 모두 아래 3장의 입력 원문을 글자까지 동일하게 사용한다.
 
