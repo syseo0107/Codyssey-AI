@@ -4,7 +4,7 @@
 
 | 순서 | 문서 | 한 줄 소개 |
 | --- | --- | --- |
-| 1 | [docs/model-comparison.md](docs/model-comparison.md) | 모델 3종을 같은 프롬프트와 기준 4개로 비교하고 선정한 보고서 |
-| 2 | [docs/system-design.md](docs/system-design.md) | 과업 정의, 페르소나, 시스템 프롬프트, Few-shot 예시, 검증 전략, 개선 이력 |
-| 3 | [docs/run-log.md](docs/run-log.md) | 선정 모델과 나눈 20턴 대화 원문과 작업 기록 |
-| 4 | [docs/unresolved.md](docs/unresolved.md) | 프롬프트로 해결하지 못한 과업과 막힌 이유 |
+| 1 | [docs/model-comparison.md](docs/model-comparison.md) | 같은 영수증·키워드·프롬프트를 모델 3종에 입력하고 결과 비교 |
+| 2 | [docs/system-design.md](docs/system-design.md) | 리뷰 작성 보조 페르소나, 시스템 프롬프트, 입력 템플릿, 예시 3개, 검증 질문, 개선 이력 |
+| 3 | [docs/run-log.md](docs/run-log.md) | 실제 대화 원문, 동일 입력 반복, 조건 변경, 환각·문맥 끊김 표시, 작업 기록 |
+| 4 | [docs/unresolved.md](docs/unresolved.md) | 프롬프트를 수정해도 해결하지 못한 실제 사례와 시도한 프롬프트 |
