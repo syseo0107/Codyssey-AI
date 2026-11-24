@@ -1,0 +1,33 @@
+Dreamina 이미지 생성 프롬프트 (카테고리: 이미지 생성)
+기준: 스토리보드 3-1장 샷리스트 (샷 크기, 앵글, 렌즈, 피사체 위치)
+설정: 비율 16:9. 한국어 원문을 먼저 넣고, 프롬프트를 잘 따르지 않으면 영어 번역으로 다시 생성한다.
+스토리보드에는 실제로 넣은 쪽을 옮긴다. 영어 번역은 Claude가 작성했다.
+생성 후 확인: 피사체가 샷리스트의 3분할 위치에 있는가, 자막 자리(S2 아래 20%, S4 위 3분의 2)가 비어 있는가.
+
+==================== 씬 1 / 샷 S1 ====================
+[KO]
+어깨 높이에서 약간 내려다본 어깨 너머 미디엄 클로즈업, 35mm 렌즈. 밤의 어두운 방, 책상 위 노트북 화면만 푸르스름하게 빛나는 유일한 광원이다. 노트북 화면이 프레임의 왼쪽에서 가운데까지 3분의 2를 차지하고, 작은 숙소 사진이 빽빽한 격자로 가득하지만 흐려서 내용을 읽을 수 없다. 노트북 앞에 앉은 사람의 어깨와 뒷머리가 프레임 오른쪽 아래 4분의 1에 흐릿한 어두운 윤곽으로 걸린다. 책상 왼쪽 아래에 식은 머그컵 하나. 초점은 노트북 화면. 조용한 여행 매거진 화보 같은 실사 사진, 낮은 채도, 먹색과 차가운 푸른빛 위주의 색, 은은한 필름 그레인, 여백이 많은 구도, 16:9 가로, 글자와 로고와 워터마크 없음, 사람 얼굴 없음
+
+[EN]
+Over-the-shoulder medium close-up from shoulder height, angled slightly down, 35mm lens. A dark room at night; the laptop screen on the desk is the only light source, glowing a cold bluish light. The laptop screen fills the left two thirds of the frame and shows a dense grid of tiny accommodation photos, too blurry to read. The shoulder and back of the head of a person sitting at the laptop appear as a soft, out-of-focus dark silhouette in the lower right quarter of the frame. A single cold mug at the lower left of the desk. Focus on the laptop screen. Photorealistic, like a quiet travel magazine editorial, low saturation, palette of charcoal black and cold blue, subtle film grain, generous negative space, 16:9 landscape, no text, no logos, no watermark, no visible face.
+
+==================== 씬 2 / 샷 S2 ====================
+[KO]
+정부감 90도 탑샷 플랫레이, 50mm 렌즈, 오프화이트 리넨 천. 화면 세로 가운데에 물건 네 개가 넉넉한 간격으로 가로 한 줄에 놓여 있다. 왼쪽부터 반듯하게 접힌 수건, 작은 성냥갑, 김이 가늘게 오르는 찻잔, 덮인 천 표지 책. 찻잔과 책은 화면 오른쪽 3분의 1에 있다. 화면 오른쪽 가장자리에서 손 하나가 들어와 책 쪽을 향한다. 손은 화면의 6분의 1 이내로 작게. 화면 아래 5분의 1은 빈 리넨으로 비워 둔다. 아침의 부드러운 측면광과 옅은 그림자. 조용한 여행 매거진 화보 같은 실사 사진, 부드러운 자연광, 낮은 채도, 오프화이트와 먹색과 쑥색 위주의 색, 은은한 필름 그레인, 여백이 많은 구도, 16:9 가로, 글자와 로고와 워터마크 없음, 사람 얼굴 없음
+
+[EN]
+Overhead 90-degree top-down flat lay, 50mm lens, off-white linen cloth. Four objects in a single horizontal row across the vertical center of the frame, generously spaced. From left to right: a neatly folded towel, a small matchbox, a teacup with a thin wisp of steam, a closed cloth-bound book. The teacup and book sit in the right third of the frame. One hand enters from the right edge of the frame, reaching toward the book; the hand is small, no more than one sixth of the frame. The bottom fifth of the frame is empty linen. Soft morning side light with faint shadows. Photorealistic, like a quiet travel magazine editorial, soft natural light, low saturation, palette of off-white, charcoal and muted sage green, subtle film grain, generous negative space, 16:9 landscape, no text, no logos, no watermark, no visible face.
+
+==================== 씬 3 / 샷 S3 ====================
+[KO]
+의자에 앉은 사람의 눈높이에서 본 와이드 샷, 35mm 렌즈, 깊은 심도. 숲을 향해 큰 창이 난 조용한 방, 이른 아침. 큰 창이 화면 왼쪽에서 가운데까지 절반을 차지한다. 화면 오른쪽 아래 3분의 1에 낮은 나무 의자 하나와 그 옆 작은 나무 탁자, 탁자 위에 덮인 천 표지 책과 김이 오르는 찻잔. 얇은 리넨 커튼, 나무 바닥에 길게 드는 햇빛. 사람 없음. 조용한 여행 매거진 화보 같은 실사 사진, 부드러운 자연광, 낮은 채도, 오프화이트와 먹색과 쑥색 위주의 색, 은은한 필름 그레인, 여백이 많은 구도, 16:9 가로, 글자와 로고와 워터마크 없음, 사람 얼굴 없음
+
+[EN]
+Wide shot from the eye level of a person seated in a chair, 35mm lens, deep depth of field. A quiet room with a large window facing a forest, early morning. The large window fills the left half of the frame, from the left edge to the center. In the lower right third: a low wooden chair and a small wooden side table beside it, with a closed cloth-bound book and a steaming teacup on the table. Thin linen curtains, long beams of sunlight across the wooden floor. No people. Photorealistic, like a quiet travel magazine editorial, soft natural light, low saturation, palette of off-white, charcoal and muted sage green, subtle film grain, generous negative space, 16:9 landscape, no text, no logos, no watermark, no visible face.
+
+==================== 씬 4 / 샷 S4 ====================
+[KO]
+눈높이의 익스트림 와이드 풍경 샷, 35mm 렌즈, 창틀은 보이지 않는다. 이른 아침의 풍경. 옅은 안개가 낀 쑥색 숲과 겹겹의 능선이 화면 아래쪽 3분의 1에 있다. 화면 위쪽 3분의 2는 밝은 안개와 흐린 하늘로 비어 있어 글자를 올릴 여백이 된다. 사람과 건물 없음. 조용한 여행 매거진 화보 같은 실사 사진, 부드러운 자연광, 낮은 채도, 오프화이트와 먹색과 쑥색 위주의 색, 은은한 필름 그레인, 여백이 많은 구도, 16:9 가로, 글자와 로고와 워터마크 없음, 사람 얼굴 없음
+
+[EN]
+Eye-level extreme wide landscape shot, 35mm lens, no window frame visible. Early morning. A sage-green forest in light mist and layered mountain ridges occupy the bottom third of the frame. The top two thirds are empty bright mist and overcast sky, leaving room for text. No people, no buildings. Photorealistic, like a quiet travel magazine editorial, soft natural light, low saturation, palette of off-white, charcoal and muted sage green, subtle film grain, generous negative space, 16:9 landscape, no text, no logos, no watermark, no visible face.
