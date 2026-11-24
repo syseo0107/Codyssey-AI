@@ -13,7 +13,7 @@
 | 항목 | 내용 |
 |---|---|
 | 모델·버전 | Claude Haiku 4.5 (리브레챗 표기: claude-haiku-4-5-20251001) |
-| 서비스·요금제 | 리브레챗(LibreChat) / 요금제 [직접 입력] |
+| 서비스·요금제 | 리브레챗(LibreChat, localhost:3080) v0.8.9 / 각 모델 제공사 API를 리브레챗에 연결해 호출. 별도 요금제는 기록하지 않음 |
 | 실행 시점(KST) | 2026-11-24 09:28 ~ 09:30 |
 | 시스템 프롬프트 | system-design.md 3-1 v1 |
 | Few-shot | system-design.md 4장의 예시 3개 |
