@@ -1,0 +1,539 @@
+[
+  {
+    "parent": {
+      "type": "data_source_id",
+      "data_source_id": "4235468e-9d9b-819e-91fa-000b8f894aa7"
+    },
+    "properties": {
+      "제목": {
+        "title": [
+          {
+            "type": "text",
+            "text": {
+              "content": "겨울철 집에서 하는 10분 운동 · 인스타그램"
+            }
+          }
+        ]
+      },
+      "주제": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "겨울철 집에서 하는 10분 운동"
+            }
+          }
+        ]
+      },
+      "플랫폼": {
+        "select": {
+          "name": "인스타그램"
+        }
+      },
+      "본문": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "겨울엔 집에서 딱 10분만 움직여도 몸이 훨씬 덜 굳어.\n출근 전에 해도 좋고, 퇴근 후 멍한 몸 풀기에도 딱이야.\n스쿼트, 플랭크, 제자리 걷기처럼 쉬운 동작만 이어서 하면 부담이 적어.\n숨이 조금 차오를 정도로만 해도 오늘 운동은 성공.\n저장해두고 내일 아침 10분 루틴으로 바로 써봐."
+            }
+          }
+        ]
+      },
+      "톤": {
+        "select": {
+          "name": "친근"
+        }
+      },
+      "대상": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "20~30대 직장인"
+            }
+          }
+        ]
+      },
+      "버전": {
+        "select": {
+          "name": "A"
+        }
+      },
+      "글자 수": {
+        "number": 162
+      },
+      "검사 통과": {
+        "checkbox": true
+      },
+      "실행 ID": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "local-2026-11-28T0538"
+            }
+          }
+        ]
+      },
+      "해시태그": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "#홈트 #집운동 #10분운동 #겨울운동 #직장인운동 #직장인홈트 #아침운동 #퇴근후운동 #전신운동 #실내운동"
+            }
+          }
+        ]
+      },
+      "훅 유형": {
+        "select": {
+          "name": "결과"
+        }
+      }
+    },
+    "children": [
+      {
+        "type": "paragraph",
+        "paragraph": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "겨울엔 집에서 딱 10분만 움직여도 몸이 훨씬 덜 굳어.\n출근 전에 해도 좋고, 퇴근 후 멍한 몸 풀기에도 딱이야.\n스쿼트, 플랭크, 제자리 걷기처럼 쉬운 동작만 이어서 하면 부담이 적어.\n숨이 조금 차오를 정도로만 해도 오늘 운동은 성공.\n저장해두고 내일 아침 10분 루틴으로 바로 써봐.\n\n#홈트 #집운동 #10분운동 #겨울운동 #직장인운동 #직장인홈트 #아침운동 #퇴근후운동 #전신운동 #실내운동"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "parent": {
+      "type": "data_source_id",
+      "data_source_id": "4235468e-9d9b-819e-91fa-000b8f894aa7"
+    },
+    "properties": {
+      "제목": {
+        "title": [
+          {
+            "type": "text",
+            "text": {
+              "content": "겨울 집콕 직장인이 꼭 알아야 할 10분 운동"
+            }
+          }
+        ]
+      },
+      "주제": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "겨울철 집에서 하는 10분 운동"
+            }
+          }
+        ]
+      },
+      "플랫폼": {
+        "select": {
+          "name": "블로그"
+        }
+      },
+      "본문": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "퇴근하고 나면 몸은 굳어 있고, 밖은 춥고, 헬스장까지 가는 길도 더 멀게 느껴집니다. 그래서 운동은 미루고, 하루가 끝날수록 피로만 쌓이기 쉽죠.\n\n## 몸을 여는 3분 준비\n집에서 하는 10분 운동은 시작이 가벼워야 이어집니다. 제자리 걷기, 팔 돌리기, 허리와 발목을 천천히 푸는 동작처럼 몸을 깨우는 준비부터 해보세요.\n\n이때 중요한 건 숨이 너무 차지 않을 정도로 움직이는 겁니다. 겨울에는 관절이 뻣뻣해지기 쉬워서, 처음부터 강하게 하기보다 몸의 온도를 올린다는 느낌이 더 잘 맞습니다.\n\n## 앉아 있는 몸을 깨우는 4분\n직장인에게는 오래 앉아 있는 자세를 푸는 동작이 특히 필요합니다. 스쿼트, 런지, 벽에 기대는 푸시업처럼 공간을 많이 차지하지 않는 동작을 섞으면 집에서도 충분히 가능합니다.\n\n운동을 길게 못 해도 괜찮습니다. 자세를 무리 없이 지키는 것이 먼저고, 횟수보다 오늘 내 몸이 덜 굳는지 느껴보는 쪽이 더 현실적입니다.\n\n## 마무리까지 부담 없는 3분\n마지막에는 코어와 스트레칭을 붙여주면 흐름이 정리됩니다. 플랭크나 누워서 다리 들기처럼 짧게 버티는 동작 뒤에 허벅지, 종아리, 어깨를 가볍게 늘려보세요.\n\n이 단계는 운동을 끝내는 신호이기도 합니다. 짧아도 마무리가 있으면 몸이 덜 뻐근하게 느껴지고, 다음 날 다시 시작하기가 조금 쉬워집니다.\n\n결국 겨울철 집 운동은 길게 버티는 계획보다, 10분 안에 몸을 깨우고 앉은 자세를 풀고 마무리 스트레칭까지 연결하는 데 의미가 있습니다. 무리한 목표보다 오늘 바로 할 수 있는 동작부터 붙이면, 바쁜 직장인도 집에서 운동을 꾸준히 이어가기 한결 수월해집니다."
+            }
+          }
+        ]
+      },
+      "톤": {
+        "select": {
+          "name": "친근"
+        }
+      },
+      "대상": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "20~30대 직장인"
+            }
+          }
+        ]
+      },
+      "버전": {
+        "select": {
+          "name": "A"
+        }
+      },
+      "글자 수": {
+        "number": 807
+      },
+      "검사 통과": {
+        "checkbox": true
+      },
+      "실행 ID": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "local-2026-11-28T0538"
+            }
+          }
+        ]
+      }
+    },
+    "children": [
+      {
+        "type": "paragraph",
+        "paragraph": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "퇴근하고 나면 몸은 굳어 있고, 밖은 춥고, 헬스장까지 가는 길도 더 멀게 느껴집니다. 그래서 운동은 미루고, 하루가 끝날수록 피로만 쌓이기 쉽죠."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "heading_2",
+        "heading_2": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "몸을 여는 3분 준비"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "paragraph",
+        "paragraph": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "집에서 하는 10분 운동은 시작이 가벼워야 이어집니다. 제자리 걷기, 팔 돌리기, 허리와 발목을 천천히 푸는 동작처럼 몸을 깨우는 준비부터 해보세요."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "paragraph",
+        "paragraph": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "이때 중요한 건 숨이 너무 차지 않을 정도로 움직이는 겁니다. 겨울에는 관절이 뻣뻣해지기 쉬워서, 처음부터 강하게 하기보다 몸의 온도를 올린다는 느낌이 더 잘 맞습니다."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "heading_2",
+        "heading_2": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "앉아 있는 몸을 깨우는 4분"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "paragraph",
+        "paragraph": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "직장인에게는 오래 앉아 있는 자세를 푸는 동작이 특히 필요합니다. 스쿼트, 런지, 벽에 기대는 푸시업처럼 공간을 많이 차지하지 않는 동작을 섞으면 집에서도 충분히 가능합니다."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "paragraph",
+        "paragraph": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "운동을 길게 못 해도 괜찮습니다. 자세를 무리 없이 지키는 것이 먼저고, 횟수보다 오늘 내 몸이 덜 굳는지 느껴보는 쪽이 더 현실적입니다."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "heading_2",
+        "heading_2": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "마무리까지 부담 없는 3분"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "paragraph",
+        "paragraph": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "마지막에는 코어와 스트레칭을 붙여주면 흐름이 정리됩니다. 플랭크나 누워서 다리 들기처럼 짧게 버티는 동작 뒤에 허벅지, 종아리, 어깨를 가볍게 늘려보세요."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "paragraph",
+        "paragraph": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "이 단계는 운동을 끝내는 신호이기도 합니다. 짧아도 마무리가 있으면 몸이 덜 뻐근하게 느껴지고, 다음 날 다시 시작하기가 조금 쉬워집니다."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "paragraph",
+        "paragraph": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "결국 겨울철 집 운동은 길게 버티는 계획보다, 10분 안에 몸을 깨우고 앉은 자세를 풀고 마무리 스트레칭까지 연결하는 데 의미가 있습니다. 무리한 목표보다 오늘 바로 할 수 있는 동작부터 붙이면, 바쁜 직장인도 집에서 운동을 꾸준히 이어가기 한결 수월해집니다."
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "parent": {
+      "type": "data_source_id",
+      "data_source_id": "4235468e-9d9b-819e-91fa-000b8f894aa7"
+    },
+    "properties": {
+      "제목": {
+        "title": [
+          {
+            "type": "text",
+            "text": {
+              "content": "겨울철 집에서 하는 10분 운동 · X"
+            }
+          }
+        ]
+      },
+      "주제": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "겨울철 집에서 하는 10분 운동"
+            }
+          }
+        ]
+      },
+      "플랫폼": {
+        "select": {
+          "name": "X"
+        }
+      },
+      "본문": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "겨울엔 집에서 10분만 움직여도 몸이 풀려요.\n스쿼트 3세트, 제자리걸음 2분, 플랭크 30초만 해보세요.\n따뜻한 물 한 컵으로 마무리하면 더 좋아요. #겨울운동 #홈트"
+            }
+          }
+        ]
+      },
+      "톤": {
+        "select": {
+          "name": "친근"
+        }
+      },
+      "대상": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "20~30대 직장인"
+            }
+          }
+        ]
+      },
+      "버전": {
+        "select": {
+          "name": "A"
+        }
+      },
+      "글자 수": {
+        "number": 94
+      },
+      "검사 통과": {
+        "checkbox": true
+      },
+      "실행 ID": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "local-2026-11-28T0538"
+            }
+          }
+        ]
+      },
+      "훅 유형": {
+        "select": {
+          "name": "결론 제시"
+        }
+      }
+    },
+    "children": [
+      {
+        "type": "paragraph",
+        "paragraph": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "겨울엔 집에서 10분만 움직여도 몸이 풀려요.\n스쿼트 3세트, 제자리걸음 2분, 플랭크 30초만 해보세요.\n따뜻한 물 한 컵으로 마무리하면 더 좋아요. #겨울운동 #홈트"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "parent": {
+      "type": "data_source_id",
+      "data_source_id": "4235468e-9d9b-819e-91fa-000b8f894aa7"
+    },
+    "properties": {
+      "제목": {
+        "title": [
+          {
+            "type": "text",
+            "text": {
+              "content": "겨울철 집에서 하는 10분 운동 · 대표 이미지"
+            }
+          }
+        ]
+      },
+      "주제": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "겨울철 집에서 하는 10분 운동"
+            }
+          }
+        ]
+      },
+      "플랫폼": {
+        "select": {
+          "name": "대표 이미지"
+        }
+      },
+      "본문": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "A cozy winter home workout scene featuring one young woman in comfortable athletic wear doing a yoga mat stretch in a warm living room, with a window showing soft snowfall outside, a mug on a small side table, and a towel nearby, creating an active yet calm atmosphere.\nStyle: clean editorial lifestyle photography, realistic, soft natural light, high detail\nColor: warm beige, cream, muted gray, soft brown, subtle cool blue from the winter window light\nComposition: one main subject centered on a yoga mat, medium-wide framing, uncluttered background, gentle depth of field, balanced negative space, square 1:1, no text, no logos"
+            }
+          }
+        ]
+      },
+      "톤": {
+        "select": {
+          "name": "친근"
+        }
+      },
+      "대상": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "20~30대 직장인"
+            }
+          }
+        ]
+      },
+      "버전": {
+        "select": {
+          "name": "A"
+        }
+      },
+      "글자 수": {
+        "number": 631
+      },
+      "검사 통과": {
+        "checkbox": true
+      },
+      "실행 ID": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "local-2026-11-28T0538"
+            }
+          }
+        ]
+      },
+      "이미지": {
+        "files": [
+          {
+            "type": "file_upload",
+            "file_upload": {
+              "id": "4265468e-9d9b-81ac-9f6c-00b2578ef514"
+            },
+            "name": "cover.jpg"
+          }
+        ]
+      }
+    },
+    "children": [
+      {
+        "type": "paragraph",
+        "paragraph": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "A cozy winter home workout scene featuring one young woman in comfortable athletic wear doing a yoga mat stretch in a warm living room, with a window showing soft snowfall outside, a mug on a small side table, and a towel nearby, creating an active yet calm atmosphere.\nStyle: clean editorial lifestyle photography, realistic, soft natural light, high detail\nColor: warm beige, cream, muted gray, soft brown, subtle cool blue from the winter window light\nComposition: one main subject centered on a yoga mat, medium-wide framing, uncluttered background, gentle depth of field, balanced negative space, square 1:1, no text, no logos"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

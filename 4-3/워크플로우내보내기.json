@@ -1,0 +1,828 @@
+{
+  "name": "AI 소셜 콘텐츠 자동 생성",
+  "nodes": [
+    {
+      "id": "f0b6c654-eab8-470a-83d8-cb838ea4d670",
+      "name": "폼 입력",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "formTitle": "AI 소셜 콘텐츠 만들기",
+        "formDescription": "주제를 넣으면 인스타그램·블로그·X 글과 대표 이미지를 만들어 노션에 저장합니다.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "주제",
+              "placeholder": "예: 겨울철 집에서 하는 10분 운동",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "보는 사람",
+              "placeholder": "예: 20~30대 직장인 (비우면 20~30대 직장인)"
+            },
+            {
+              "fieldLabel": "톤",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "친근"
+                  },
+                  {
+                    "option": "전문"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "버전",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "A"
+                  },
+                  {
+                    "option": "B"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "webhookId": "fe3a4c13-33e2-49ca-833e-2e26a3e28352"
+    },
+    {
+      "id": "a08e85e9-cb44-4f18-8b8d-3364d99669cb",
+      "name": "입력 정리",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// 폼 값을 정리하고, 최종 프롬프트(프롬프트템플릿.md)로 텍스트 생성 요청 본문 4개를 만든다 (Codyssey, OpenAI 호환)\nconst TEXT_MODEL = \"gpt-5.4-mini\";\nconst PROMPTS = {\n  \"instagram\": \"너는 인스타그램 캡션 작가야\\n주제는 {{ $json.topic }}, 보는 사람은 {{ $json.audience }}, 톤은 {{ $json.tone }}이야\\n- 첫 줄: \\\"더 보기\\\"를 누르기 전에 읽히는 한 문장. 인사·자기소개 없이 결과나 궁금증으로 시작\\n- 본문: 3~5줄, 한 줄에 한 가지 내용\\n- 마지막 줄: 저장이나 댓글을 부르는 한 문장\\n- 독자를 \\\"당신\\\"이라고 부르지 마. 호칭은 생략하거나 친구에게 말하듯\\n- 해시태그: 정확히 10개, 넓은 태그와 좁은 태그를 섞어서. 주제나 보는 사람과 관계없는 태그는 넣지 마\\n- 절약 시간, 퍼센트, 배수처럼 효과를 나타내는 숫자는 지어내지 마\\n- hook_type: 첫 줄에 쓴 훅 기법의 이름만 2~6자 (예: 결과 제시, 질문, 반전)\\n- 출력은 올바른 JSON이어야 해. 키와 값은 큰따옴표로 감싸고, 값 안에서 무언가를 인용할 때만 작은따옴표를 써. 값 안의 줄바꿈은 \\\\n으로 써\\n출력은 JSON만: {\\\"caption\\\": \\\"첫 줄\\\\n본문 1\\\\n본문 2\\\\n본문 3\\\\n마지막 줄\\\", \\\"hashtags\\\": [\\\"#태그1\\\", \\\"#태그2\\\", \\\"...\\\", \\\"#태그10\\\"], \\\"hook_type\\\": \\\"훅 이름\\\"}\",\n  \"blog\": \"너는 블로그 칼럼 작가야\\n주제는 {{ $json.topic }}, 보는 사람은 {{ $json.audience }}, 톤은 {{ $json.tone }}이야\\n- 제목: 읽으면 얻는 것을 분명하게, 강조어는 딱 하나\\n- 도입: 2~3문장, 인사 없이 독자가 겪는 문제로 시작\\n- 본문: 소제목(##) 3개, 소제목마다 2문단\\n- 마무리: 핵심을 한 문단으로 정리. 마무리 문단에는 소제목을 붙이지 마. 소제목은 본문의 3개뿐이야\\n- 본문 전체 공백 포함 900~1,100자. 1,200자를 넘기지 마\\n- 절약 시간, 퍼센트, 배수처럼 효과를 나타내는 숫자는 지어내지 마. 출처, \\\"~이 최고다\\\" 같은 단정도 쓰지 마\\n- 출력은 올바른 JSON이어야 해. 키와 값은 큰따옴표로 감싸고, 값 안에서 무언가를 인용할 때만 작은따옴표를 써. 값 안의 줄바꿈은 \\\\n으로 써\\n출력은 JSON만: {\\\"title\\\": \\\"제목\\\", \\\"body\\\": \\\"도입\\\\n\\\\n## 소제목 1\\\\n문단\\\\n\\\\n문단\\\\n\\\\n## 소제목 2\\\\n...\\\\n\\\\n## 소제목 3\\\\n...\\\\n\\\\n마무리 문단\\\"}\",\n  \"x\": \"너는 X(트위터) 카피라이터야\\n주제는 {{ $json.topic }}, 톤은 {{ $json.tone }}이야\\n- 첫 문장: 인사 없이 결론이나 긴장감으로 시작\\n- 핵심 2~3개를 한 문장씩\\n- 해시태그 2개 이하\\n- 해시태그 포함 전체 120자 이내\\n- 절약 시간, 퍼센트, 배수처럼 효과를 나타내는 숫자는 지어내지 마\\n- hook_type: 첫 문장에 쓴 훅 기법의 이름만 2~6자 (예: 결론 제시, 질문, 반전)\\n- 출력은 올바른 JSON이어야 해. 키와 값은 큰따옴표로 감싸고, 값 안에서 무언가를 인용할 때만 작은따옴표를 써. 값 안의 줄바꿈은 \\\\n으로 써\\n출력은 JSON만: {\\\"post\\\": \\\"게시글\\\", \\\"hook_type\\\": \\\"훅 이름\\\"}\",\n  \"image\": \"너는 SNS 대표 이미지 아트디렉터야\\n주제 {{ $json.topic }}로 이미지 생성 AI에 넣을 영어 프롬프트 1개를 써줘\\n- 장면 하나, 주인공 하나\\n- 장면 묘사 뒤에 Style:, Color:, Composition: 세 부분을 이어서 써. 부분 사이는 \\\\n으로 구분\\n- 이미지 안에 글자, 로고, 실존 브랜드, 캐릭터를 넣지 않기\\n- 프롬프트 끝에 반드시 square 1:1, no text, no logos를 넣어\\n- 출력은 올바른 JSON이어야 해. 키와 값은 큰따옴표로 감싸고, 값 안에서 무언가를 인용할 때만 작은따옴표를 써. 값 안의 줄바꿈은 \\\\n으로 써\\n출력은 JSON만: {\\\"image_prompt\\\": \\\"장면 묘사\\\\nStyle: ...\\\\nColor: ...\\\\nComposition: ..., square 1:1, no text, no logos\\\"}\"\n};\n\nfunction normalizeInput(form) {\n  return {\n    topic: String(form['주제'] || form.topic || '').trim(),\n    audience: String(form['보는 사람'] || form.audience || '').trim() || '20~30대 직장인',\n    tone: String(form['톤'] || form.tone || '').trim() || '친근',\n    version: String(form['버전'] || form.version || '').trim() || 'A',\n  };\n}\n\nfunction fillPrompt(prompt, input) {\n  return prompt\n    .split('{{ $json.topic }}').join(input.topic)\n    .split('{{ $json.audience }}').join(input.audience)\n    .split('{{ $json.tone }}').join(input.tone);\n}\n\nfunction chatBody(prompt, model) {\n  return {\n    model,\n    messages: [{ role: 'user', content: prompt }],\n  };\n}\n\nconst input = normalizeInput($input.first().json);\nconst bodies = {};\nfor (const k of Object.keys(PROMPTS)) bodies[k] = chatBody(fillPrompt(PROMPTS[k], input), TEXT_MODEL);\nreturn [{ json: { input, bodies } }];"
+      }
+    },
+    {
+      "id": "ec39cd23-8cd2-4bad-a587-fe0b0af2a0c6",
+      "name": "인스타그램 생성",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://copa.codyssey.kr/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('입력 정리').first().json.bodies.instagram) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Codyssey API 헤더 인증"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "0bd779a6-6fc8-4140-992c-979668761aad",
+      "name": "인스타그램 검사",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        200
+      ],
+      "parameters": {
+        "jsCode": "// 응답을 JSON으로 읽고 기준(글자 수·해시태그·소제목 등)을 검사한다. $runIndex 로 시도 횟수를 센다.\n// ───────── 검사 함수 ─────────\n\n// 글자 수: 이모지·한글 모두 1자로 센다 (공백 포함)\nfunction charCount(s) {\n  return [...String(s ?? '')].length;\n}\n\n// X 가중치 글자 수 (twitter-text v3 기준)\n// 라틴·기본 문장부호는 1, 한글·한자·이모지 등은 2, URL은 23. 상한 280.\nfunction xWeightedLength(s) {\n  let text = String(s ?? '');\n  let weight = 0;\n  text = text.replace(/https?:\\/\\/\\S+/g, () => { weight += 23; return ''; });\n  for (const ch of text) {\n    const c = ch.codePointAt(0);\n    const light =\n      (c <= 0x10ff) ||\n      (c >= 0x2000 && c <= 0x200d) ||\n      (c >= 0x2010 && c <= 0x201f) ||\n      (c >= 0x2032 && c <= 0x2037);\n    weight += light ? 1 : 2;\n  }\n  return weight;\n}\n\nfunction lines(s) {\n  return String(s ?? '').split('\\n').map(l => l.trim()).filter(Boolean);\n}\n\nfunction hashtagsIn(s) {\n  return String(s ?? '').match(/#[^\\s#]+/g) || [];\n}\n\n// 확인할 수 없는 통계일 수 있는 표현 (사람이 다시 볼 것)\nfunction numberClaims(s) {\n  return String(s ?? '').match(/\\d[\\d,.]*\\s*(%|퍼센트|배|명|만|억|위)/g) || [];\n}\n\nfunction startsWithGreeting(s) {\n  return /^(안녕|여러분|반가|오늘은|저는)/.test(lines(s)[0] || '');\n}\n\nfunction check(name, value, target, pass) {\n  return { name, value, target, pass };\n}\n\nfunction checkInstagram(d) {\n  const caption = d.caption ?? '';\n  const tags = Array.isArray(d.hashtags) ? d.hashtags : hashtagsIn(d.hashtags);\n  const n = lines(caption).length;\n  return [\n    check('해시태그 개수', tags.length, '정확히 10', tags.length === 10),\n    check('해시태그 형식', tags.filter(t => !/^#[^\\s#]+$/.test(t)).join(' ') || '정상', '# + 공백 없음',\n      tags.every(t => /^#[^\\s#]+$/.test(t))),\n    check('캡션 줄 수', n, '5~7 (첫 줄 + 본문 3~5 + 마지막 줄)', n >= 5 && n <= 7),\n    check('캡션 안 해시태그', hashtagsIn(caption).length, '0 (hashtags 칸에만)', hashtagsIn(caption).length === 0),\n    check('인사로 시작', startsWithGreeting(caption) ? '예' : '아니오', '아니오', !startsWithGreeting(caption)),\n    check('수치 표현', numberClaims(caption).join(', ') || '없음', '없음 (있으면 사실 확인)', numberClaims(caption).length === 0),\n    check('hook_type', d.hook_type ? '있음' : '없음', '있음', Boolean(d.hook_type)),\n  ];\n}\n\nfunction checkBlog(d) {\n  const body = d.body ?? '';\n  const len = charCount(body);\n  const heads = (body.match(/^##\\s+\\S/gm) || []).length;\n  const deeper = (body.match(/^#{3,}\\s/gm) || []).length;\n  return [\n    check('제목', d.title ? charCount(d.title) + '자' : '없음', '있음', Boolean(d.title)),\n    check('본문 글자 수(공백 포함)', len, '800~1,200 (미션 500 이상)', len >= 800 && len <= 1200),\n    check('미션 기준 500자', len, '500 이상', len >= 500),\n    check('소제목(##) 개수', heads, '정확히 3', heads === 3),\n    check('### 이하 소제목', deeper, '0', deeper === 0),\n    // 출력 형식 예시(\"마크다운 본문, 소제목은 ##\")를 본문에 그대로 베낀 경우\n    check('형식 안내문 복사', /마크다운 본문|소제목은 ##/.test(body) ? '있음' : '없음', '없음',\n      !/마크다운 본문|소제목은 ##/.test(body)),\n    check('인사로 시작', startsWithGreeting(body) ? '예' : '아니오', '아니오', !startsWithGreeting(body)),\n    check('수치 표현', numberClaims(body).join(', ') || '없음', '없음 (있으면 사실 확인)', numberClaims(body).length === 0),\n  ];\n}\n\nfunction checkX(d) {\n  const post = d.post ?? '';\n  const len = charCount(post);\n  const w = xWeightedLength(post);\n  const tags = hashtagsIn(post).length;\n  return [\n    check('글자 수', len, '120 이하 (미션 280 이하)', len <= 120),\n    check('X 실제 가중치', w, '280 이하', w <= 280),\n    check('해시태그 개수', tags, '2 이하', tags <= 2),\n    check('인사로 시작', startsWithGreeting(post) ? '예' : '아니오', '아니오', !startsWithGreeting(post)),\n    check('수치 표현', numberClaims(post).join(', ') || '없음', '없음 (있으면 사실 확인)', numberClaims(post).length === 0),\n    check('hook_type', d.hook_type ? '있음' : '없음', '있음', Boolean(d.hook_type)),\n  ];\n}\n\nfunction checkImage(d) {\n  const p = d.image_prompt ?? '';\n  const nonAscii = [...p].filter(ch => ch.codePointAt(0) > 0x7f).length;\n  return [\n    check('프롬프트', p ? charCount(p) + '자' : '없음', '있음', Boolean(p)),\n    check('영어 여부(비ASCII 글자 수)', nonAscii, '0', nonAscii === 0),\n    check('정사각형 지시', /1:1|square/i.test(p) ? '있음' : '없음', '있음', /1:1|square/i.test(p)),\n    check('글자 금지 지시', /no text|without text|no words|no letters|no typography/i.test(p) ? '있음' : '없음', '있음',\n      /no text|without text|no words|no letters|no typography/i.test(p)),\n  ];\n}\n\nfunction checkAll(input) {\n  const checkers = { instagram: checkInstagram, blog: checkBlog, x: checkX, image: checkImage };\n  const result = {};\n  for (const [key, fn] of Object.entries(checkers)) {\n    if (input[key] == null) continue;\n    const checks = fn(input[key]);\n    result[key] = { pass: checks.every(c => c.pass), failed: checks.filter(c => !c.pass).map(c => c.name), checks };\n  }\n  result.allPass = Object.values(result).every(r => r.pass);\n  return result;\n}\n\nfunction parseModelJson(content) {\n  const s = String(content || '').replace(/```(?:json)?/g, '').trim();\n  const start = s.indexOf('{');\n  const end = s.lastIndexOf('}');\n  return JSON.parse(start >= 0 && end > start ? s.slice(start, end + 1) : s);\n}\n\nfunction evaluate(platform, apiResponse, attempt, maxAttempts) {\n  const content = apiResponse && apiResponse.choices && apiResponse.choices[0] && apiResponse.choices[0].message\n    ? apiResponse.choices[0].message.content : '';\n  let data = null;\n  let failed = [];\n  let pass = false;\n  try {\n    data = parseModelJson(content);\n    const r = checkAll({ [platform]: data })[platform];\n    pass = r.pass;\n    failed = r.failed;\n  } catch (e) {\n    failed = ['JSON 파싱 실패: ' + e.message];\n  }\n  return { platform, data, pass, failed, attempt, done: pass || attempt >= maxAttempts };\n}\n\nreturn [{ json: evaluate(\"instagram\", $input.first().json, $runIndex + 1, 3) }];"
+      }
+    },
+    {
+      "id": "a7261dad-da77-481a-91e7-4e3c31c03e47",
+      "name": "인스타그램 완료?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        960,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "eb7f437f-6fd6-4a3d-95b6-de5ba6f98a3b",
+              "leftValue": "={{ $json.done }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "37f8cd37-6a46-459b-8563-71402387e965",
+      "name": "블로그 생성",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        400
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://copa.codyssey.kr/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('입력 정리').first().json.bodies.blog) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Codyssey API 헤더 인증"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "85d3cece-0bb8-46a3-b809-19b70e8a44c6",
+      "name": "블로그 검사",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        400
+      ],
+      "parameters": {
+        "jsCode": "// 응답을 JSON으로 읽고 기준(글자 수·해시태그·소제목 등)을 검사한다. $runIndex 로 시도 횟수를 센다.\n// ───────── 검사 함수 ─────────\n\n// 글자 수: 이모지·한글 모두 1자로 센다 (공백 포함)\nfunction charCount(s) {\n  return [...String(s ?? '')].length;\n}\n\n// X 가중치 글자 수 (twitter-text v3 기준)\n// 라틴·기본 문장부호는 1, 한글·한자·이모지 등은 2, URL은 23. 상한 280.\nfunction xWeightedLength(s) {\n  let text = String(s ?? '');\n  let weight = 0;\n  text = text.replace(/https?:\\/\\/\\S+/g, () => { weight += 23; return ''; });\n  for (const ch of text) {\n    const c = ch.codePointAt(0);\n    const light =\n      (c <= 0x10ff) ||\n      (c >= 0x2000 && c <= 0x200d) ||\n      (c >= 0x2010 && c <= 0x201f) ||\n      (c >= 0x2032 && c <= 0x2037);\n    weight += light ? 1 : 2;\n  }\n  return weight;\n}\n\nfunction lines(s) {\n  return String(s ?? '').split('\\n').map(l => l.trim()).filter(Boolean);\n}\n\nfunction hashtagsIn(s) {\n  return String(s ?? '').match(/#[^\\s#]+/g) || [];\n}\n\n// 확인할 수 없는 통계일 수 있는 표현 (사람이 다시 볼 것)\nfunction numberClaims(s) {\n  return String(s ?? '').match(/\\d[\\d,.]*\\s*(%|퍼센트|배|명|만|억|위)/g) || [];\n}\n\nfunction startsWithGreeting(s) {\n  return /^(안녕|여러분|반가|오늘은|저는)/.test(lines(s)[0] || '');\n}\n\nfunction check(name, value, target, pass) {\n  return { name, value, target, pass };\n}\n\nfunction checkInstagram(d) {\n  const caption = d.caption ?? '';\n  const tags = Array.isArray(d.hashtags) ? d.hashtags : hashtagsIn(d.hashtags);\n  const n = lines(caption).length;\n  return [\n    check('해시태그 개수', tags.length, '정확히 10', tags.length === 10),\n    check('해시태그 형식', tags.filter(t => !/^#[^\\s#]+$/.test(t)).join(' ') || '정상', '# + 공백 없음',\n      tags.every(t => /^#[^\\s#]+$/.test(t))),\n    check('캡션 줄 수', n, '5~7 (첫 줄 + 본문 3~5 + 마지막 줄)', n >= 5 && n <= 7),\n    check('캡션 안 해시태그', hashtagsIn(caption).length, '0 (hashtags 칸에만)', hashtagsIn(caption).length === 0),\n    check('인사로 시작', startsWithGreeting(caption) ? '예' : '아니오', '아니오', !startsWithGreeting(caption)),\n    check('수치 표현', numberClaims(caption).join(', ') || '없음', '없음 (있으면 사실 확인)', numberClaims(caption).length === 0),\n    check('hook_type', d.hook_type ? '있음' : '없음', '있음', Boolean(d.hook_type)),\n  ];\n}\n\nfunction checkBlog(d) {\n  const body = d.body ?? '';\n  const len = charCount(body);\n  const heads = (body.match(/^##\\s+\\S/gm) || []).length;\n  const deeper = (body.match(/^#{3,}\\s/gm) || []).length;\n  return [\n    check('제목', d.title ? charCount(d.title) + '자' : '없음', '있음', Boolean(d.title)),\n    check('본문 글자 수(공백 포함)', len, '800~1,200 (미션 500 이상)', len >= 800 && len <= 1200),\n    check('미션 기준 500자', len, '500 이상', len >= 500),\n    check('소제목(##) 개수', heads, '정확히 3', heads === 3),\n    check('### 이하 소제목', deeper, '0', deeper === 0),\n    // 출력 형식 예시(\"마크다운 본문, 소제목은 ##\")를 본문에 그대로 베낀 경우\n    check('형식 안내문 복사', /마크다운 본문|소제목은 ##/.test(body) ? '있음' : '없음', '없음',\n      !/마크다운 본문|소제목은 ##/.test(body)),\n    check('인사로 시작', startsWithGreeting(body) ? '예' : '아니오', '아니오', !startsWithGreeting(body)),\n    check('수치 표현', numberClaims(body).join(', ') || '없음', '없음 (있으면 사실 확인)', numberClaims(body).length === 0),\n  ];\n}\n\nfunction checkX(d) {\n  const post = d.post ?? '';\n  const len = charCount(post);\n  const w = xWeightedLength(post);\n  const tags = hashtagsIn(post).length;\n  return [\n    check('글자 수', len, '120 이하 (미션 280 이하)', len <= 120),\n    check('X 실제 가중치', w, '280 이하', w <= 280),\n    check('해시태그 개수', tags, '2 이하', tags <= 2),\n    check('인사로 시작', startsWithGreeting(post) ? '예' : '아니오', '아니오', !startsWithGreeting(post)),\n    check('수치 표현', numberClaims(post).join(', ') || '없음', '없음 (있으면 사실 확인)', numberClaims(post).length === 0),\n    check('hook_type', d.hook_type ? '있음' : '없음', '있음', Boolean(d.hook_type)),\n  ];\n}\n\nfunction checkImage(d) {\n  const p = d.image_prompt ?? '';\n  const nonAscii = [...p].filter(ch => ch.codePointAt(0) > 0x7f).length;\n  return [\n    check('프롬프트', p ? charCount(p) + '자' : '없음', '있음', Boolean(p)),\n    check('영어 여부(비ASCII 글자 수)', nonAscii, '0', nonAscii === 0),\n    check('정사각형 지시', /1:1|square/i.test(p) ? '있음' : '없음', '있음', /1:1|square/i.test(p)),\n    check('글자 금지 지시', /no text|without text|no words|no letters|no typography/i.test(p) ? '있음' : '없음', '있음',\n      /no text|without text|no words|no letters|no typography/i.test(p)),\n  ];\n}\n\nfunction checkAll(input) {\n  const checkers = { instagram: checkInstagram, blog: checkBlog, x: checkX, image: checkImage };\n  const result = {};\n  for (const [key, fn] of Object.entries(checkers)) {\n    if (input[key] == null) continue;\n    const checks = fn(input[key]);\n    result[key] = { pass: checks.every(c => c.pass), failed: checks.filter(c => !c.pass).map(c => c.name), checks };\n  }\n  result.allPass = Object.values(result).every(r => r.pass);\n  return result;\n}\n\nfunction parseModelJson(content) {\n  const s = String(content || '').replace(/```(?:json)?/g, '').trim();\n  const start = s.indexOf('{');\n  const end = s.lastIndexOf('}');\n  return JSON.parse(start >= 0 && end > start ? s.slice(start, end + 1) : s);\n}\n\nfunction evaluate(platform, apiResponse, attempt, maxAttempts) {\n  const content = apiResponse && apiResponse.choices && apiResponse.choices[0] && apiResponse.choices[0].message\n    ? apiResponse.choices[0].message.content : '';\n  let data = null;\n  let failed = [];\n  let pass = false;\n  try {\n    data = parseModelJson(content);\n    const r = checkAll({ [platform]: data })[platform];\n    pass = r.pass;\n    failed = r.failed;\n  } catch (e) {\n    failed = ['JSON 파싱 실패: ' + e.message];\n  }\n  return { platform, data, pass, failed, attempt, done: pass || attempt >= maxAttempts };\n}\n\nreturn [{ json: evaluate(\"blog\", $input.first().json, $runIndex + 1, 3) }];"
+      }
+    },
+    {
+      "id": "de1f6345-6563-421e-8beb-e6790b5ba267",
+      "name": "블로그 완료?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        960,
+        400
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c712d44d-2a11-4022-b6e7-7f5e101c41bf",
+              "leftValue": "={{ $json.done }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "e4548453-bc08-4144-994f-0b7dd49a395a",
+      "name": "X 생성",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        600
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://copa.codyssey.kr/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('입력 정리').first().json.bodies.x) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Codyssey API 헤더 인증"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "5c06da9a-5d1c-46c4-a1c1-58612c86b89e",
+      "name": "X 검사",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        600
+      ],
+      "parameters": {
+        "jsCode": "// 응답을 JSON으로 읽고 기준(글자 수·해시태그·소제목 등)을 검사한다. $runIndex 로 시도 횟수를 센다.\n// ───────── 검사 함수 ─────────\n\n// 글자 수: 이모지·한글 모두 1자로 센다 (공백 포함)\nfunction charCount(s) {\n  return [...String(s ?? '')].length;\n}\n\n// X 가중치 글자 수 (twitter-text v3 기준)\n// 라틴·기본 문장부호는 1, 한글·한자·이모지 등은 2, URL은 23. 상한 280.\nfunction xWeightedLength(s) {\n  let text = String(s ?? '');\n  let weight = 0;\n  text = text.replace(/https?:\\/\\/\\S+/g, () => { weight += 23; return ''; });\n  for (const ch of text) {\n    const c = ch.codePointAt(0);\n    const light =\n      (c <= 0x10ff) ||\n      (c >= 0x2000 && c <= 0x200d) ||\n      (c >= 0x2010 && c <= 0x201f) ||\n      (c >= 0x2032 && c <= 0x2037);\n    weight += light ? 1 : 2;\n  }\n  return weight;\n}\n\nfunction lines(s) {\n  return String(s ?? '').split('\\n').map(l => l.trim()).filter(Boolean);\n}\n\nfunction hashtagsIn(s) {\n  return String(s ?? '').match(/#[^\\s#]+/g) || [];\n}\n\n// 확인할 수 없는 통계일 수 있는 표현 (사람이 다시 볼 것)\nfunction numberClaims(s) {\n  return String(s ?? '').match(/\\d[\\d,.]*\\s*(%|퍼센트|배|명|만|억|위)/g) || [];\n}\n\nfunction startsWithGreeting(s) {\n  return /^(안녕|여러분|반가|오늘은|저는)/.test(lines(s)[0] || '');\n}\n\nfunction check(name, value, target, pass) {\n  return { name, value, target, pass };\n}\n\nfunction checkInstagram(d) {\n  const caption = d.caption ?? '';\n  const tags = Array.isArray(d.hashtags) ? d.hashtags : hashtagsIn(d.hashtags);\n  const n = lines(caption).length;\n  return [\n    check('해시태그 개수', tags.length, '정확히 10', tags.length === 10),\n    check('해시태그 형식', tags.filter(t => !/^#[^\\s#]+$/.test(t)).join(' ') || '정상', '# + 공백 없음',\n      tags.every(t => /^#[^\\s#]+$/.test(t))),\n    check('캡션 줄 수', n, '5~7 (첫 줄 + 본문 3~5 + 마지막 줄)', n >= 5 && n <= 7),\n    check('캡션 안 해시태그', hashtagsIn(caption).length, '0 (hashtags 칸에만)', hashtagsIn(caption).length === 0),\n    check('인사로 시작', startsWithGreeting(caption) ? '예' : '아니오', '아니오', !startsWithGreeting(caption)),\n    check('수치 표현', numberClaims(caption).join(', ') || '없음', '없음 (있으면 사실 확인)', numberClaims(caption).length === 0),\n    check('hook_type', d.hook_type ? '있음' : '없음', '있음', Boolean(d.hook_type)),\n  ];\n}\n\nfunction checkBlog(d) {\n  const body = d.body ?? '';\n  const len = charCount(body);\n  const heads = (body.match(/^##\\s+\\S/gm) || []).length;\n  const deeper = (body.match(/^#{3,}\\s/gm) || []).length;\n  return [\n    check('제목', d.title ? charCount(d.title) + '자' : '없음', '있음', Boolean(d.title)),\n    check('본문 글자 수(공백 포함)', len, '800~1,200 (미션 500 이상)', len >= 800 && len <= 1200),\n    check('미션 기준 500자', len, '500 이상', len >= 500),\n    check('소제목(##) 개수', heads, '정확히 3', heads === 3),\n    check('### 이하 소제목', deeper, '0', deeper === 0),\n    // 출력 형식 예시(\"마크다운 본문, 소제목은 ##\")를 본문에 그대로 베낀 경우\n    check('형식 안내문 복사', /마크다운 본문|소제목은 ##/.test(body) ? '있음' : '없음', '없음',\n      !/마크다운 본문|소제목은 ##/.test(body)),\n    check('인사로 시작', startsWithGreeting(body) ? '예' : '아니오', '아니오', !startsWithGreeting(body)),\n    check('수치 표현', numberClaims(body).join(', ') || '없음', '없음 (있으면 사실 확인)', numberClaims(body).length === 0),\n  ];\n}\n\nfunction checkX(d) {\n  const post = d.post ?? '';\n  const len = charCount(post);\n  const w = xWeightedLength(post);\n  const tags = hashtagsIn(post).length;\n  return [\n    check('글자 수', len, '120 이하 (미션 280 이하)', len <= 120),\n    check('X 실제 가중치', w, '280 이하', w <= 280),\n    check('해시태그 개수', tags, '2 이하', tags <= 2),\n    check('인사로 시작', startsWithGreeting(post) ? '예' : '아니오', '아니오', !startsWithGreeting(post)),\n    check('수치 표현', numberClaims(post).join(', ') || '없음', '없음 (있으면 사실 확인)', numberClaims(post).length === 0),\n    check('hook_type', d.hook_type ? '있음' : '없음', '있음', Boolean(d.hook_type)),\n  ];\n}\n\nfunction checkImage(d) {\n  const p = d.image_prompt ?? '';\n  const nonAscii = [...p].filter(ch => ch.codePointAt(0) > 0x7f).length;\n  return [\n    check('프롬프트', p ? charCount(p) + '자' : '없음', '있음', Boolean(p)),\n    check('영어 여부(비ASCII 글자 수)', nonAscii, '0', nonAscii === 0),\n    check('정사각형 지시', /1:1|square/i.test(p) ? '있음' : '없음', '있음', /1:1|square/i.test(p)),\n    check('글자 금지 지시', /no text|without text|no words|no letters|no typography/i.test(p) ? '있음' : '없음', '있음',\n      /no text|without text|no words|no letters|no typography/i.test(p)),\n  ];\n}\n\nfunction checkAll(input) {\n  const checkers = { instagram: checkInstagram, blog: checkBlog, x: checkX, image: checkImage };\n  const result = {};\n  for (const [key, fn] of Object.entries(checkers)) {\n    if (input[key] == null) continue;\n    const checks = fn(input[key]);\n    result[key] = { pass: checks.every(c => c.pass), failed: checks.filter(c => !c.pass).map(c => c.name), checks };\n  }\n  result.allPass = Object.values(result).every(r => r.pass);\n  return result;\n}\n\nfunction parseModelJson(content) {\n  const s = String(content || '').replace(/```(?:json)?/g, '').trim();\n  const start = s.indexOf('{');\n  const end = s.lastIndexOf('}');\n  return JSON.parse(start >= 0 && end > start ? s.slice(start, end + 1) : s);\n}\n\nfunction evaluate(platform, apiResponse, attempt, maxAttempts) {\n  const content = apiResponse && apiResponse.choices && apiResponse.choices[0] && apiResponse.choices[0].message\n    ? apiResponse.choices[0].message.content : '';\n  let data = null;\n  let failed = [];\n  let pass = false;\n  try {\n    data = parseModelJson(content);\n    const r = checkAll({ [platform]: data })[platform];\n    pass = r.pass;\n    failed = r.failed;\n  } catch (e) {\n    failed = ['JSON 파싱 실패: ' + e.message];\n  }\n  return { platform, data, pass, failed, attempt, done: pass || attempt >= maxAttempts };\n}\n\nreturn [{ json: evaluate(\"x\", $input.first().json, $runIndex + 1, 3) }];"
+      }
+    },
+    {
+      "id": "615d3678-6271-4749-8d19-9cce84e5b786",
+      "name": "X 완료?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        960,
+        600
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c0379993-6f80-4df4-a9a0-bc3aea87e0ff",
+              "leftValue": "={{ $json.done }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "9200c824-6dfe-488a-8a45-959505662866",
+      "name": "이미지 프롬프트 생성",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        800
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://copa.codyssey.kr/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('입력 정리').first().json.bodies.image) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Codyssey API 헤더 인증"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "1a688c0c-41ca-4147-be99-8f0b7f0f7c14",
+      "name": "이미지 프롬프트 검사",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        800
+      ],
+      "parameters": {
+        "jsCode": "// 응답을 JSON으로 읽고 기준(글자 수·해시태그·소제목 등)을 검사한다. $runIndex 로 시도 횟수를 센다.\n// ───────── 검사 함수 ─────────\n\n// 글자 수: 이모지·한글 모두 1자로 센다 (공백 포함)\nfunction charCount(s) {\n  return [...String(s ?? '')].length;\n}\n\n// X 가중치 글자 수 (twitter-text v3 기준)\n// 라틴·기본 문장부호는 1, 한글·한자·이모지 등은 2, URL은 23. 상한 280.\nfunction xWeightedLength(s) {\n  let text = String(s ?? '');\n  let weight = 0;\n  text = text.replace(/https?:\\/\\/\\S+/g, () => { weight += 23; return ''; });\n  for (const ch of text) {\n    const c = ch.codePointAt(0);\n    const light =\n      (c <= 0x10ff) ||\n      (c >= 0x2000 && c <= 0x200d) ||\n      (c >= 0x2010 && c <= 0x201f) ||\n      (c >= 0x2032 && c <= 0x2037);\n    weight += light ? 1 : 2;\n  }\n  return weight;\n}\n\nfunction lines(s) {\n  return String(s ?? '').split('\\n').map(l => l.trim()).filter(Boolean);\n}\n\nfunction hashtagsIn(s) {\n  return String(s ?? '').match(/#[^\\s#]+/g) || [];\n}\n\n// 확인할 수 없는 통계일 수 있는 표현 (사람이 다시 볼 것)\nfunction numberClaims(s) {\n  return String(s ?? '').match(/\\d[\\d,.]*\\s*(%|퍼센트|배|명|만|억|위)/g) || [];\n}\n\nfunction startsWithGreeting(s) {\n  return /^(안녕|여러분|반가|오늘은|저는)/.test(lines(s)[0] || '');\n}\n\nfunction check(name, value, target, pass) {\n  return { name, value, target, pass };\n}\n\nfunction checkInstagram(d) {\n  const caption = d.caption ?? '';\n  const tags = Array.isArray(d.hashtags) ? d.hashtags : hashtagsIn(d.hashtags);\n  const n = lines(caption).length;\n  return [\n    check('해시태그 개수', tags.length, '정확히 10', tags.length === 10),\n    check('해시태그 형식', tags.filter(t => !/^#[^\\s#]+$/.test(t)).join(' ') || '정상', '# + 공백 없음',\n      tags.every(t => /^#[^\\s#]+$/.test(t))),\n    check('캡션 줄 수', n, '5~7 (첫 줄 + 본문 3~5 + 마지막 줄)', n >= 5 && n <= 7),\n    check('캡션 안 해시태그', hashtagsIn(caption).length, '0 (hashtags 칸에만)', hashtagsIn(caption).length === 0),\n    check('인사로 시작', startsWithGreeting(caption) ? '예' : '아니오', '아니오', !startsWithGreeting(caption)),\n    check('수치 표현', numberClaims(caption).join(', ') || '없음', '없음 (있으면 사실 확인)', numberClaims(caption).length === 0),\n    check('hook_type', d.hook_type ? '있음' : '없음', '있음', Boolean(d.hook_type)),\n  ];\n}\n\nfunction checkBlog(d) {\n  const body = d.body ?? '';\n  const len = charCount(body);\n  const heads = (body.match(/^##\\s+\\S/gm) || []).length;\n  const deeper = (body.match(/^#{3,}\\s/gm) || []).length;\n  return [\n    check('제목', d.title ? charCount(d.title) + '자' : '없음', '있음', Boolean(d.title)),\n    check('본문 글자 수(공백 포함)', len, '800~1,200 (미션 500 이상)', len >= 800 && len <= 1200),\n    check('미션 기준 500자', len, '500 이상', len >= 500),\n    check('소제목(##) 개수', heads, '정확히 3', heads === 3),\n    check('### 이하 소제목', deeper, '0', deeper === 0),\n    // 출력 형식 예시(\"마크다운 본문, 소제목은 ##\")를 본문에 그대로 베낀 경우\n    check('형식 안내문 복사', /마크다운 본문|소제목은 ##/.test(body) ? '있음' : '없음', '없음',\n      !/마크다운 본문|소제목은 ##/.test(body)),\n    check('인사로 시작', startsWithGreeting(body) ? '예' : '아니오', '아니오', !startsWithGreeting(body)),\n    check('수치 표현', numberClaims(body).join(', ') || '없음', '없음 (있으면 사실 확인)', numberClaims(body).length === 0),\n  ];\n}\n\nfunction checkX(d) {\n  const post = d.post ?? '';\n  const len = charCount(post);\n  const w = xWeightedLength(post);\n  const tags = hashtagsIn(post).length;\n  return [\n    check('글자 수', len, '120 이하 (미션 280 이하)', len <= 120),\n    check('X 실제 가중치', w, '280 이하', w <= 280),\n    check('해시태그 개수', tags, '2 이하', tags <= 2),\n    check('인사로 시작', startsWithGreeting(post) ? '예' : '아니오', '아니오', !startsWithGreeting(post)),\n    check('수치 표현', numberClaims(post).join(', ') || '없음', '없음 (있으면 사실 확인)', numberClaims(post).length === 0),\n    check('hook_type', d.hook_type ? '있음' : '없음', '있음', Boolean(d.hook_type)),\n  ];\n}\n\nfunction checkImage(d) {\n  const p = d.image_prompt ?? '';\n  const nonAscii = [...p].filter(ch => ch.codePointAt(0) > 0x7f).length;\n  return [\n    check('프롬프트', p ? charCount(p) + '자' : '없음', '있음', Boolean(p)),\n    check('영어 여부(비ASCII 글자 수)', nonAscii, '0', nonAscii === 0),\n    check('정사각형 지시', /1:1|square/i.test(p) ? '있음' : '없음', '있음', /1:1|square/i.test(p)),\n    check('글자 금지 지시', /no text|without text|no words|no letters|no typography/i.test(p) ? '있음' : '없음', '있음',\n      /no text|without text|no words|no letters|no typography/i.test(p)),\n  ];\n}\n\nfunction checkAll(input) {\n  const checkers = { instagram: checkInstagram, blog: checkBlog, x: checkX, image: checkImage };\n  const result = {};\n  for (const [key, fn] of Object.entries(checkers)) {\n    if (input[key] == null) continue;\n    const checks = fn(input[key]);\n    result[key] = { pass: checks.every(c => c.pass), failed: checks.filter(c => !c.pass).map(c => c.name), checks };\n  }\n  result.allPass = Object.values(result).every(r => r.pass);\n  return result;\n}\n\nfunction parseModelJson(content) {\n  const s = String(content || '').replace(/```(?:json)?/g, '').trim();\n  const start = s.indexOf('{');\n  const end = s.lastIndexOf('}');\n  return JSON.parse(start >= 0 && end > start ? s.slice(start, end + 1) : s);\n}\n\nfunction evaluate(platform, apiResponse, attempt, maxAttempts) {\n  const content = apiResponse && apiResponse.choices && apiResponse.choices[0] && apiResponse.choices[0].message\n    ? apiResponse.choices[0].message.content : '';\n  let data = null;\n  let failed = [];\n  let pass = false;\n  try {\n    data = parseModelJson(content);\n    const r = checkAll({ [platform]: data })[platform];\n    pass = r.pass;\n    failed = r.failed;\n  } catch (e) {\n    failed = ['JSON 파싱 실패: ' + e.message];\n  }\n  return { platform, data, pass, failed, attempt, done: pass || attempt >= maxAttempts };\n}\n\nreturn [{ json: evaluate(\"image\", $input.first().json, $runIndex + 1, 3) }];"
+      }
+    },
+    {
+      "id": "7ca34fcc-c3f8-44a0-a014-fc78d5cc18a1",
+      "name": "이미지 프롬프트 완료?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        960,
+        800
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "316c8be8-7b87-4e2b-98c5-6a85381c9d1d",
+              "leftValue": "={{ $json.done }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "d3f05035-f73f-4259-b55f-508f3de2bf9f",
+      "name": "이미지 생성",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        1000
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ contents: [ { parts: [ { text: $('이미지 프롬프트 검사').last().json.data.image_prompt } ] } ], generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: '1:1' } } }) }}",
+        "options": {
+          "timeout": 180000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Gemini 헤더 인증"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "4d12f958-9042-4b84-8d3d-fa51cc91932d",
+      "name": "노션 업로드 만들기",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        1000
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/file_uploads",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Notion-Version",
+              "value": "2026-03-11"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Notion 헤더 인증"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "3b87a999-72c7-426c-89d3-7a85b59195d5",
+      "name": "이미지 꺼내기",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        1000
+      ],
+      "parameters": {
+        "jsCode": "// Gemini 응답에서 이미지(base64)와 형식을 꺼낸다\nfunction extractGeminiImage(resp) {\n  const parts = (resp && resp.candidates && resp.candidates[0] && resp.candidates[0].content && resp.candidates[0].content.parts) || [];\n  const part = parts.find((p) => p.inlineData || p.inline_data);\n  if (!part) {\n    const why = (resp && resp.candidates && resp.candidates[0] && resp.candidates[0].finishReason) || JSON.stringify(resp).slice(0, 200);\n    throw new Error('Gemini 응답에 이미지가 없습니다: ' + why);\n  }\n  const d = part.inlineData || part.inline_data;\n  const mime = d.mimeType || d.mime_type || 'image/png';\n  return { b64: d.data, mime, fileName: 'cover.' + (mime.split('/')[1] || 'png').replace('jpeg', 'jpg') };\n}\n\nreturn [{ json: extractGeminiImage($('이미지 생성').first().json) }];"
+      }
+    },
+    {
+      "id": "109f0a08-6367-4b78-9f26-5a6d5cf74592",
+      "name": "이미지 파일로",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1200,
+        1000
+      ],
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "b64",
+        "binaryPropertyName": "data",
+        "options": {
+          "fileName": "={{ $json.fileName }}",
+          "mimeType": "={{ $json.mime }}"
+        }
+      }
+    },
+    {
+      "id": "c2c41d7a-edca-4765-9d7c-058f11b925d8",
+      "name": "노션 업로드 보내기",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        1200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.notion.com/v1/file_uploads/{{ $('노션 업로드 만들기').first().json.id }}/send",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Notion-Version",
+              "value": "2026-03-11"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Notion 헤더 인증"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "21d0990c-750b-4cea-9c19-5a65f73efce9",
+      "name": "노션 행 만들기",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        1200
+      ],
+      "parameters": {
+        "jsCode": "// 플랫폼별 결과를 노션 데이터베이스 행 4개(인스타그램·블로그·X·대표 이미지)로 만든다\nconst DATA_SOURCE_ID = \"4235468e-9d9b-819e-91fa-000b8f894aa7\";\n\nfunction richText(text) {\n  const s = String(text == null ? '' : text);\n  const parts = [];\n  for (let i = 0; i < s.length; i += 2000) parts.push({ type: 'text', text: { content: s.slice(i, i + 2000) } });\n  return parts;\n}\n\nfunction markdownToBlocks(md) {\n  const blocks = [];\n  for (const para of String(md || '').split(/\\n{2,}/)) {\n    const lines = para.split('\\n');\n    for (let i = 0; i < lines.length; i++) {\n      const t = lines[i].trim();\n      if (!t) continue;\n      const h = t.match(/^##\\s+(.*)$/);\n      if (h) blocks.push({ type: 'heading_2', heading_2: { rich_text: richText(h[1]) } });\n      else if (i === 0 || !blocks.length || blocks[blocks.length - 1].type !== 'paragraph') {\n        blocks.push({ type: 'paragraph', paragraph: { rich_text: richText(t) } });\n      } else {\n        blocks[blocks.length - 1].paragraph.rich_text.push(...richText('\\n' + t));\n      }\n    }\n  }\n  return blocks.slice(0, 100);\n}\n\nfunction buildNotionPages(input, results, uploadId, dataSourceId, runId, fileName) {\n  const para = (text) => ({ type: 'paragraph', paragraph: { rich_text: richText(text) } });\n  const ig = results.instagram.data || {};\n  const blog = results.blog.data || {};\n  const x = results.x.data || {};\n  const img = results.image.data || {};\n  const tags = Array.isArray(ig.hashtags) ? ig.hashtags.join(' ') : String(ig.hashtags || '');\n  const rows = [\n    { platform: '인스타그램', title: `${input.topic} · 인스타그램`, body: ig.caption, tags, hook: ig.hook_type,\n      r: results.instagram, children: [para(`${ig.caption || ''}\\n\\n${tags}`)] },\n    { platform: '블로그', title: blog.title || `${input.topic} · 블로그`, body: blog.body,\n      r: results.blog, children: markdownToBlocks(blog.body) },\n    { platform: 'X', title: `${input.topic} · X`, body: x.post, hook: x.hook_type,\n      r: results.x, children: [para(x.post)] },\n    { platform: '대표 이미지', title: `${input.topic} · 대표 이미지`, body: img.image_prompt,\n      r: results.image, image: true, children: [para(img.image_prompt)] },\n  ];\n  return rows.map((row) => {\n    const body = String(row.body || '');\n    const properties = {\n      '제목': { title: richText(row.title) },\n      '주제': { rich_text: richText(input.topic) },\n      '플랫폼': { select: { name: row.platform } },\n      '본문': { rich_text: richText(body) },\n      '톤': { select: { name: input.tone } },\n      '대상': { rich_text: richText(input.audience) },\n      '버전': { select: { name: input.version } },\n      '글자 수': { number: [...body].length },\n      '검사 통과': { checkbox: Boolean(row.r.pass) },\n      '실행 ID': { rich_text: richText(runId) },\n    };\n    if (row.tags) properties['해시태그'] = { rich_text: richText(row.tags) };\n    if (row.hook) properties['훅 유형'] = { select: { name: String(row.hook).slice(0, 100) } };\n    const children = row.children.slice();\n    if (row.image && uploadId) {\n      properties['이미지'] = { files: [{ type: 'file_upload', file_upload: { id: uploadId }, name: fileName || 'cover.png' }] };\n    }\n    if (!row.r.pass) children.unshift(para(`검사 기준을 벗어남 (시도 ${row.r.attempt}회): ${row.r.failed.join(', ')}`));\n    return {\n      parent: { type: 'data_source_id', data_source_id: dataSourceId },\n      properties,\n      children: children.slice(0, 100),\n    };\n  });\n}\n\nconst input = $('입력 정리').first().json.input;\nconst results = {\n  instagram: $('인스타그램 검사').last().json,\n  blog: $('블로그 검사').last().json,\n  x: $('X 검사').last().json,\n  image: $('이미지 프롬프트 검사').last().json,\n};\nconst uploadId = $('노션 업로드 만들기').first().json.id;\nconst fileName = $('이미지 꺼내기').first().json.fileName;\nconst pages = buildNotionPages(input, results, uploadId, DATA_SOURCE_ID, String($execution.id), fileName);\nreturn pages.map((page) => ({ json: { page } }));"
+      }
+    },
+    {
+      "id": "dd816781-b387-416f-a368-c00c33099ae3",
+      "name": "노션 저장",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        1200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/pages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Notion-Version",
+              "value": "2026-03-11"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.page) }}",
+        "options": {}
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Notion 헤더 인증"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    }
+  ],
+  "connections": {
+    "폼 입력": {
+      "main": [
+        [
+          {
+            "node": "입력 정리",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "입력 정리": {
+      "main": [
+        [
+          {
+            "node": "인스타그램 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "인스타그램 생성": {
+      "main": [
+        [
+          {
+            "node": "인스타그램 검사",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "인스타그램 검사": {
+      "main": [
+        [
+          {
+            "node": "인스타그램 완료?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "인스타그램 완료?": {
+      "main": [
+        [
+          {
+            "node": "블로그 생성",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "인스타그램 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "블로그 생성": {
+      "main": [
+        [
+          {
+            "node": "블로그 검사",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "블로그 검사": {
+      "main": [
+        [
+          {
+            "node": "블로그 완료?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "블로그 완료?": {
+      "main": [
+        [
+          {
+            "node": "X 생성",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "블로그 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "X 생성": {
+      "main": [
+        [
+          {
+            "node": "X 검사",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "X 검사": {
+      "main": [
+        [
+          {
+            "node": "X 완료?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "X 완료?": {
+      "main": [
+        [
+          {
+            "node": "이미지 프롬프트 생성",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "X 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 프롬프트 생성": {
+      "main": [
+        [
+          {
+            "node": "이미지 프롬프트 검사",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 프롬프트 검사": {
+      "main": [
+        [
+          {
+            "node": "이미지 프롬프트 완료?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 프롬프트 완료?": {
+      "main": [
+        [
+          {
+            "node": "이미지 생성",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "이미지 프롬프트 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 생성": {
+      "main": [
+        [
+          {
+            "node": "노션 업로드 만들기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "노션 업로드 만들기": {
+      "main": [
+        [
+          {
+            "node": "이미지 꺼내기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 꺼내기": {
+      "main": [
+        [
+          {
+            "node": "이미지 파일로",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 파일로": {
+      "main": [
+        [
+          {
+            "node": "노션 업로드 보내기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "노션 업로드 보내기": {
+      "main": [
+        [
+          {
+            "node": "노션 행 만들기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "노션 행 만들기": {
+      "main": [
+        [
+          {
+            "node": "노션 저장",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
