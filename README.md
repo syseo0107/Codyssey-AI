@@ -45,3 +45,11 @@
 | 문서 | 내용 |
 | --- | --- |
 | [진행가이드.md](4-3/진행가이드.md) | 미션 요약, 진행 순서, n8n 노드 구성, 막히기 쉬운 곳, 프롬프트 초안(v0) |
+| [프롬프트템플릿.md](4-3/프롬프트템플릿.md) | 플랫폼별 프롬프트 설계와 수정 기록 (초안 → 수정 → 최종) |
+| [시험기록/](4-3/시험기록) | 프롬프트 버전별 모델 응답 원본, Codyssey 재시험(v3-codyssey), 로컬 전체 실행(pipeline) |
+| [워크플로우내보내기.json](4-3/워크플로우내보내기.json) | n8n에서 가져오기 하는 워크플로우 (노드 21개, 인증은 이름만 들어 있음) |
+| [tools/build-workflow.js](4-3/tools/build-workflow.js) | 최종 프롬프트·검사 코드로 워크플로우 JSON 생성 |
+| [tools/pipeline-test.js](4-3/tools/pipeline-test.js) | n8n과 같은 순서로 로컬에서 전체 실행 (텍스트 → 이미지 → 노션) |
+| [tools/text-check.js](4-3/tools/text-check.js) | 최종 프롬프트를 한 모델로 돌려 기준 검사 |
+| [tools/notion-setup.js](4-3/tools/notion-setup.js) | 노션에 개요·작업 과정 요약과 콘텐츠 DB 생성 (토큰은 4-3/.env, 저장소에 올리지 않음) |
+| [tools/check.js](4-3/tools/check.js) | 생성 결과의 글자 수·해시태그·소제목 검사 (n8n Code 노드에도 사용) |
